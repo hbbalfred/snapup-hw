@@ -1,4 +1,6 @@
 foo
+udata
+!udata/.gitkeep
 # Logs
 logs
 *.log

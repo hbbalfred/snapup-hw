@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer-core');
+const puppeteer = require("puppeteer-core");
 
 const PRODUCT_URL = "https://www.vmall.com/product/10086726905036.html";
 const CHROME_EXEC = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
@@ -11,12 +11,13 @@ const CHROME_EXEC = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrom
     const browser = await puppeteer.launch({
       headless: false,
       executablePath: CHROME_EXEC,
+      userDataDir: "./udata",
     });
     const page = await browser.newPage();
     await page.setDefaultNavigationTimeout(0);
     page.on("console", (msg) => {
       if (msg.type() === "log") {
-        console.log('[Console]', msg.text());
+        console.log("[Console]", msg.text());
       }
     });
 
@@ -26,10 +27,11 @@ const CHROME_EXEC = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrom
   //
   const login = async () => {
     console.log(page.url());
-    
+
     const login = await page.$eval("#login_status", el => el.style.display);
     if (login) {
       console.log("Login...");
+
     } else {
       console.log("Not login");
     }

@@ -77,6 +77,7 @@ const CHROME_EXEC = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrom
     console.log("Purchase...");
     const btn = await page.$$("#checkoutSubmit");
     await btn.click();
+    return true;
   };
 
   // ::: main loop
@@ -89,9 +90,9 @@ const CHROME_EXEC = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrom
   await page.goto(PRODUCT_URL, openPageOptions);
 
   await loop(login, 5000);
-  await loop(snapup, 1000);
-  await loop(inqueue, 100);
-  await loop(purchase, 100);
+  await loop(snapup, 1);
+  await loop(inqueue, 1);
+  await loop(purchase, 1);
 
   console.log("Congratulation!");
 })()
@@ -109,5 +110,9 @@ async function loop(fn, interval) {
 }
 
 async function sleep(ms) {
-  return new Promise((resolve) => setTimeout(() => resolve(), ms));
+  if (ms < 100) {
+    return new Promise((resolve) => resolve());
+  } else {
+    return new Promise((resolve) => setTimeout(() => resolve(), ms));
+  }
 }

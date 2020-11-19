@@ -1,0 +1,15 @@
+{
+  "name": "snapup-vmall",
+  "version": "1.0.0",
+  "description": "For snapping up huawei mate 40 pro",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer-core": "^5.5.0"
+  }
+}

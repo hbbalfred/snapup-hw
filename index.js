@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer-core");
 
-const PRODUCT_URL = "https://www.vmall.com/product/10086726905036.html";
+const PRODUCT_URL = "https://www.vmall.com/product/10086375798519.html";
 const CHROME_EXEC = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const SNAPUP_TIME = "10:08:00";
 

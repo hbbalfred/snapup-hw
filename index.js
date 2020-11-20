@@ -2,6 +2,7 @@ const puppeteer = require("puppeteer-core");
 
 const PRODUCT_URL = "https://www.vmall.com/product/10086726905036.html";
 const CHROME_EXEC = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const SNAPUP_TIME = "10:08:00";
 
 (async function main() {
   // ::: function definition
@@ -37,6 +38,28 @@ const CHROME_EXEC = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrom
     }
     return !!login;
   };
+
+  //
+  const ready = async () => {
+    const [ h, m, s ] = SNAPUP_TIME.split(":").map(e => parseInt(e, 10));
+    const countdown = new Date().setHours(h, m, s);
+    const now = Date.now();
+    if (countdown < now) {
+      console.log("It's over");
+      return false;
+    }
+
+    const readyTime = 5000;
+    const df = countdown - Date.now();
+
+    if (df > readyTime) {
+      console.log("Ready...", (df / 1000).toFixed(3), "seconds");
+      return false;
+    }
+    
+    console.log("FOR THE HORDE!!!!");
+    return true;
+  }
 
   //
   const snapup = async () => {
@@ -90,6 +113,7 @@ const CHROME_EXEC = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrom
   await page.goto(PRODUCT_URL, openPageOptions);
 
   await loop(login, 5000);
+  await loop(ready, 1000);
   await loop(snapup, 1);
   await loop(inqueue, 1);
   await loop(purchase, 1);

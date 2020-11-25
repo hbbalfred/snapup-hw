@@ -3,6 +3,7 @@ const puppeteer = require("puppeteer-core");
 const PRODUCT_URL = "https://www.vmall.com/product/10086375798519.html";
 const CHROME_EXEC = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const SNAPUP_TIME = "10:08:00";
+const SORRY_URL = "https://sale.vmall.com/rush";
 
 (async function main() {
   // ::: function definition
@@ -57,23 +58,23 @@ const SNAPUP_TIME = "10:08:00";
       return false;
     }
     
+    await page.reload(openPageOptions);
     console.log("FOR THE HORDE!!!!");
     return true;
   }
 
   //
   const snapup = async () => {
-    await page.reload(openPageOptions);
     console.log("Reload page to snap up....")
     console.log(page.url());
     console.log(PRODUCT_URL);
     
     const ok = await page.$$eval(".product-buttonmain #pro-operation a", elems => {
-      if (elems[1]) {
-        if (elems[1].className.indexOf("product-button02 disabled") !== -1) {
+      if (elems[0]) {
+        if (elems[0].className.indexOf("product-button02 disabled") !== -1) {
           return false;
         }
-        if (elems[1].innerHTML.indexOf("立即申购") !== -1) {
+        if (elems[0].innerHTML.indexOf("立即申购") !== -1) {
           return true;
         }
       }
@@ -82,7 +83,7 @@ const SNAPUP_TIME = "10:08:00";
 
     if (ok) {
       const btns = await page.$$(".product-buttonmain #pro-operation a");
-      await btns[1].click();
+      await btns[0].click();
     }
 
     return ok;
@@ -90,9 +91,17 @@ const SNAPUP_TIME = "10:08:00";
 
   //
   const inqueue = async () => {
-    const ok = page.url().indexOf(PRODUCT_URL) !== -1;
-    console.log("In queue...");
-    return ok;
+    // FIXME:
+    if (page.url().indexOf(PRODUCT_URL) !== -1) {
+      if (page.url().indexOf(SORRY_URL) !== -1) {
+        const btn = await page.$(".box-ct #boxButton a");
+        await btn.click();
+        await loop(snapup, 0);
+        return false;
+      }
+    }
+    // TODO:
+    return false;
   };
 
   //
